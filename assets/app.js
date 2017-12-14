@@ -1,4 +1,4 @@
-var location;
+
 //this function creates the map; it needs the css styling to render
   var map, infoWindow;
   function initMap() {
@@ -28,6 +28,26 @@ var location;
       // Browser doesn't support Geolocation
       handleLocationError(false, infoWindow, map.getCenter());
     }
+
+    var tester = {
+      lat: 37.845185, 
+      lng: -122.296548
+    }
+
+    var marker = new google.maps.Marker({
+      position: tester,
+      map: map
+    });
+
+    function addMarker(location, map) {
+      var marker = new google.maps.Marker({
+          position: location,
+          title: 'Test',
+          map:map
+      });
+    }
+
+    addMarker(blah,map);
   }
 
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -39,23 +59,25 @@ var location;
   }
 
 
-$("#submit").on("click", function(event) {
-    event.preventDefault();
-	location = $("#address").val().trim();
-	// location = location.split("");
 
-	queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address"+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
+// $("#submit").on("click", function(event) {
+//     event.preventDefault();
+// 	location = $("#address").val().trim();
+// 	// location = location.split("");
 
-	$.ajax({
-	url: queryURL,
-	method: "GET"
-	}).done(function(response) {
-		console.log(response);
-		var results = response.data;
-	})
-})
+// 	queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address"+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
 
-// var marker = new google.maps.Marker({
-//   position: uluru,
-//   map: map
-// });
+// 	$.ajax({
+// 	url: queryURL,
+// 	method: "GET"
+// 	}).done(function(response) {
+// 		console.log(response);
+// 		var results = response.data;
+// 	})
+// })
+
+var blah = {
+  lat: 37.726564, 
+  lng:-122.139903
+}
+
