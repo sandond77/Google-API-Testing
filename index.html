@@ -12,6 +12,29 @@
 	<title></title>
 </head>
 <body>
+	<div class="row">
+		<div class="col">
+			<form class="form-inline">
+		      <input class="form-control" type="text" placeholder="Enter a Location" id="address">
+		      <button class="btn btn-secondary" type="submit" id="submit">Search</button>
+	    	</form>
+		</div>
+		<div class="col">
+			<div id="map">
+			</div>
+		</div>
+	</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"> </script>
+
+<script src="app.js"> </script>
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKLvcypZ9bmiAHFyHxIN1RgOuIjd0wJZ8&callback=initMap">
+</script>
+
+</body>
 
 </body>
 </html>
