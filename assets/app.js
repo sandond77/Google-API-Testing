@@ -6,6 +6,7 @@
       center: {lat: 37.09024, lng: -95.712891},
       zoom: 4
     });
+
     infoWindow = new google.maps.InfoWindow;
 
     //HTML5 geolocation.
@@ -15,10 +16,11 @@
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
+        // Re-enable the infowindows to display information about restaurant
+        // infoWindow.setPosition(pos);
+        // infoWindow.setContent('Location found.');
+        addMarker(pos,map)
+        // infoWindow.open(map);
         map.setCenter(pos);
         map.setZoom(12);
       }, function() {
@@ -29,15 +31,29 @@
       handleLocationError(false, infoWindow, map.getCenter());
     }
 
-    var tester = {
-      lat: 37.845185, 
-      lng: -122.296548
-    }
+    $('#submit').click(function(event){
+      event.preventDefault();
+      console.log("test");
+      console.log($('#address').val());
+      var location = $('#address').val();
+      $('#address').val("");
 
-    var marker = new google.maps.Marker({
-      position: tester,
-      map: map
-    });
+      queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address="+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
+
+      $.ajax({
+       url: queryURL,
+       method: "GET"
+       }).done(function(response) {
+        console.log(response);
+        var results = response.data;
+        var coords = response.results["0"].geometry.location;
+        console.log(coords)
+
+        addMarker(coords,map)
+
+
+      })
+    })
 
     function addMarker(location, map) {
       var marker = new google.maps.Marker({
@@ -45,9 +61,21 @@
           title: 'Test',
           map:map
       });
+
+      var restaurantInfo = new google.maps.InfoWindow({
+          content: "Placeholder for Information" //use variable to fill this with restaurant info like the name/address/rating
+      });
+
+      marker.addListener('click', function() {
+          restaurantInfo.open(map, marker); 
+      })
     }
 
-    addMarker(blah,map);
+    $('#clear').click(function(event){
+      event.preventDefault();
+      clearMarker();
+    })
+
   }
 
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -58,47 +86,27 @@
     infoWindow.open(map);
   }
 
+// $('#submit').click(function(event){
+//   event.preventDefault();
+//   console.log("test");
+//   console.log($('#address').val());
+//   var location = $('#address').val();
+//   $('#address').val("");
+
+//   queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address="+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
+
+//   $.ajax({
+//    url: queryURL,
+//    method: "GET"
+//    }).done(function(response) {
+//     console.log(response);
+//     var results = response.data;
+//     var coords = response.results["0"].geometry.location;
+//     console.log(coords)
 
 
-// $("#submit").click(function(event) {
-//     console.log("test");
-//     event.preventDefault();
-//   	location = $("#address").val().trim();
-//    $("#address").empty();
-//     console.log(location);
-// 	// location = location.split("");
-
-// 	// queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address"+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
-
-// 	// $.ajax({
-// 	// url: queryURL,
-// 	// method: "GET"
-// 	// }).done(function(response) {
-// 	// 	console.log(response);
-// 	// 	var results = response.data;
-// 	// })
+//    })
 // })
 
-$('#submit').click(function(event){
-  event.preventDefault();
-  console.log("test");
-  console.log($('#address').val());
-  var location = $('#address').val();
-  $('#address').val("");
 
-  queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address="+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
-
-  $.ajax({
-   url: queryURL,
-   method: "GET"
-   }).done(function(response) {
-    console.log(response);
-    var results = response.data;
-   })
-})
-
-var blah = {
-  lat: 37.726564, 
-  lng:-122.139903
-}
 

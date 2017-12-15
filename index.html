@@ -12,16 +12,17 @@
 	<title></title>
 </head>
 <body>
-	<div class="row">
-		<div class="col">
+	<div class="row align-items-center">
+		<div class="col justify-content-right">
 	    	<form onsubmit="return false">
 	    	<input type="text" placeholder="Address, City, State" required id="address">
-			<input id="submit" type="submit">
+			<input class="btn btn-secondary" id="submit" type="submit">
 			</form>
 		</div>
 		<div class="col">
 			<div id="map">
 			</div>
+			<button id="clear"> Clear Marker</button>
 		</div>
 	</div>
 
