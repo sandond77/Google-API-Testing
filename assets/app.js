@@ -1,4 +1,3 @@
-var location;
 //this function creates the map; it needs the css styling to render
   var map, infoWindow;
 
@@ -84,6 +83,18 @@ $('#submit').click(function(event){
   event.preventDefault();
   console.log("test");
   console.log($('#address').val());
+  var location = $('#address').val();
+  $('#address').val("");
+
+  queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address="+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
+
+  $.ajax({
+   url: queryURL,
+   method: "GET"
+   }).done(function(response) {
+    console.log(response);
+    var results = response.data;
+   })
 })
 
 var blah = {
