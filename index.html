@@ -14,10 +14,10 @@
 <body>
 	<div class="row">
 		<div class="col">
-			<form class="form-inline">
-		      <input class="form-control" type="text" placeholder="Enter a Location" id="address">
-		      <button class="btn btn-secondary" type="submit" id="submit">Search</button>
-	    	</form>
+	    	<form onsubmit="return false">
+	    	<input type="text" placeholder="Address, City, State" required id="address">
+			<input id="submit" type="submit">
+			</form>
 		</div>
 		<div class="col">
 			<div id="map">

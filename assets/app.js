@@ -1,6 +1,7 @@
-
+var location;
 //this function creates the map; it needs the css styling to render
   var map, infoWindow;
+
   function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 37.09024, lng: -95.712891},
@@ -60,21 +61,30 @@
 
 
 
-// $("#submit").on("click", function(event) {
+// $("#submit").click(function(event) {
+//     console.log("test");
 //     event.preventDefault();
-// 	location = $("#address").val().trim();
+//   	location = $("#address").val().trim();
+//    $("#address").empty();
+//     console.log(location);
 // 	// location = location.split("");
 
-// 	queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address"+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
+// 	// queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address"+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
 
-// 	$.ajax({
-// 	url: queryURL,
-// 	method: "GET"
-// 	}).done(function(response) {
-// 		console.log(response);
-// 		var results = response.data;
-// 	})
+// 	// $.ajax({
+// 	// url: queryURL,
+// 	// method: "GET"
+// 	// }).done(function(response) {
+// 	// 	console.log(response);
+// 	// 	var results = response.data;
+// 	// })
 // })
+
+$('#submit').click(function(event){
+  event.preventDefault();
+  console.log("test");
+  console.log($('#address').val());
+})
 
 var blah = {
   lat: 37.726564, 
