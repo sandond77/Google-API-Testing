@@ -1,6 +1,7 @@
 //this function creates the map; it needs the css styling to render
   var map, infoWindow;
-
+  var markers =[];
+  
   function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 37.09024, lng: -95.712891},
@@ -62,21 +63,25 @@
           map:map
       });
 
+      markers.push(marker);
+
       var restaurantInfo = new google.maps.InfoWindow({
           content: "Placeholder for Information" //use variable to fill this with restaurant info like the name/address/rating
       });
 
       marker.addListener('click', function() {
-          restaurantInfo.open(map, marker); 
+        restaurantInfo.open(map, marker); 
       })
     }
+  }
 
-    $('#clear').click(function(event){
-      event.preventDefault();
-      clearMarker();
+  $('#clear').click(function(event){
+    event.preventDefault();
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+      }
     })
 
-  }
 
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
