@@ -26,11 +26,11 @@ $('#submit').on('click', function(){
   event.preventDefault();
   var location = $('#restaurant').val();
   console.log("location: " + location);
-  $('#address').val("");
-  $('#results').html("<h2 class='text-center'> Results for " + location + "</h2>");
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
+      $('#results').html("<h2 class='text-center'> Results for " + location + "</h2>");
+
       var pos = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
