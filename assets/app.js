@@ -1,27 +1,100 @@
 //this function creates the map; it needs the css styling to render
   var map, infoWindow;
   var markers = [];
+  var pos;
   
-  function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 37.09024, lng: -95.712891},
-      zoom: 4
-    });
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 37.09024, lng: -95.712891},
+    zoom: 4
+  });
 
-    infoWindow = new google.maps.InfoWindow;
+  infoWindow = new google.maps.InfoWindow;
+}
 
-  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(browserHasGeolocation ?
-                        'Error: The Geolocation service failed.' :
-                        'Error: Your browser doesn\'t support geolocation.');
-  infoWindow.open(map);
-  }
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+infoWindow.setPosition(pos);
+infoWindow.setContent(browserHasGeolocation ?
+                      'Error: The Geolocation service failed.' :
+                      'Error: Your browser doesn\'t support geolocation.');
+infoWindow.open(map);
 }
 
 
+$('#submit').on('click', function(){
+  clearMakers();
+  event.preventDefault();
+  var location = $('#address').val();
+  console.log("location: " + location);
+  $('#address').val("");
+  $('#results').html("<h2 class='text-center'> Results for " + location + "</h2>");
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      currentMarker(pos)
+      map.setCenter(pos);
+      map.setZoom(12);
+      infoWindow.setContent("Your Current Location");
+
+      var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=" + location + "&latitude=" + pos.lat + "&longitude=" + pos.lng + "&limit=5",
+        "method": "GET",
+        "headers": {
+          "authorization": "Bearer p7FLN3mZ05l12noAsPo9XnkpnHonn_1O2asNEkYcBDuW0NcQNcilhY-zp0zhaSOTm-TkYVceqKZnzPzUMQorpxo6w8hOWNhc-TYT2tIaYlYbHMnLgcgh-0uDTxczWnYx",
+          "Cache-Control": "no-cache",
+          "Postman-Token": "486cc89e-9d50-c747-f79a-a8e008227e22"
+        }
+      }
+
+      $.ajax(settings).done(function (response) {
+        console.log(response);
+
+        var dataObj = response.businesses
+        var localList = dataObj;
+        console.log(dataObj);
+
+          for (var i = 0; i < dataObj.length; i++){
+            var name = dataObj[i].name;
+            var phone = dataObj[i].display_phone;
+            var rating = dataObj[i].rating;
+            var price = dataObj[i].price;
+            var addresses = [];
+
+            $('#results').append('<h5>' + name + '</h5>')
+
+            for (var j = 0; j < dataObj[i].location.display_address.length; j++){
+              $('#results').append(dataObj[i].location.display_address[j] + '<br>');
+              addresses.push(dataObj[i].location.display_address[j]);
+              console.log("address: "+addresses);
+            }
+
+            geoCoder(addresses,name,addresses)
+            addresses = "";
+            $('#results').append(phone + '<br>')
+            $('#results').append('Rating: ' + rating + '<br>')
+            $('#results').append('Price: ' + price + '<br>')
+            // var link = dataObj[i].url;
+            // $('#results').append('Website: '+ '<a href="' + link + '"Link </a> <br>');
+          }
+      })
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}); 
 
 
+//Function for finding user location
 function mylocation(){
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -44,14 +117,8 @@ function mylocation(){
 }
 
 
-$('#submit').click(function(event){
-  event.preventDefault();
-  console.log("test");
-  console.log($('#address').val());
-  var location = $('#address').val();
-  $('#address').val("");
-  mylocation()
-
+//Function for turning regular address into coordinates using the google geocoder api
+function geoCoder(location,name,addresses){
   var queryURL = "https://maps.googleapis.com/maps/api/geocode/json?address="+ location + "&key=AIzaSyBpHkoMadHxCiRan1yfwVQ85q2ZxLiLOGI"
 
   $.ajax({
@@ -63,12 +130,13 @@ $('#submit').click(function(event){
     var coords = response.results["0"].geometry.location;
     console.log(coords)
 
-    addMarker(coords)
+    addMarker(coords,name,addresses)
   })
-})
+}
+// })
 
-
-function addMarker(location) {
+//Function adds a marker at the restaurant's address; when the marker is click, restaurant info appears
+function addMarker(location,name,address) {
   var marker = new google.maps.Marker({
       position: location,
       title: 'Test',
@@ -77,8 +145,10 @@ function addMarker(location) {
 
   markers.push(marker);
 
+  var nameAddress = name + '<br>' + address[0] + '<br>' + address[1] //This may need to change if the address has additional info like a company name or suite number
+
   var restaurantInfo = new google.maps.InfoWindow({
-      content: "Placeholder for Information" //use variable to fill this with restaurant info like the name/address/rating
+      content: nameAddress //use variable to fill this with restaurant info like the name/address/rating
   });
 
   marker.addListener('click', function() {
@@ -86,6 +156,8 @@ function addMarker(location) {
   })
 }
 
+
+//Adds a marker at the users location
 function currentMarker(location) {
   var marker = new google.maps.Marker({
       position: location,
@@ -104,12 +176,11 @@ function currentMarker(location) {
 
 
 //Removing Markers
-$('#clear').click(function(event){
-  event.preventDefault();
+function clearMakers(){
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
-    }
-})
+  }
+};
 
 
 
