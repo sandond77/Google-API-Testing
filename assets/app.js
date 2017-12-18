@@ -39,7 +39,6 @@ $('#submit').on('click', function(){
       currentMarker(pos)
       map.setCenter(pos);
       map.setZoom(12);
-      infoWindow.setContent("Your Current Location");
 
       var settings = {
         "async": true,
@@ -79,7 +78,7 @@ $('#submit').on('click', function(){
             addresses = "";
             $('#results').append(phone + '<br>')
             $('#results').append('Rating: ' + rating + '<br>')
-            $('#results').append('Price: ' + price + '<br>')
+            $('#results').append('Price: ' + price + '<br>' + '<br>')
             // var link = dataObj[i].url;
             // $('#results').append('Website: '+ '<a href="' + link + '"Link </a> <br>');
           }
@@ -147,7 +146,7 @@ function addMarker(location,name,address) {
 
   markers.push(marker);
 
-  var nameAddress = name + '<br>' + address[0] + '<br>' + address[1] //This may need to change if the address has additional info like a company name or suite number
+  var nameAddress = name + '<br>' + address[0] + '<br>' + address[1]   //This may need to change if the address has additional info like a company name or suite number
 
   var restaurantInfo = new google.maps.InfoWindow({
       content: nameAddress //use variable to fill this with restaurant info like the name/address/rating
