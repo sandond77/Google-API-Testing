@@ -24,7 +24,7 @@ infoWindow.open(map);
 $('#submit').on('click', function(){
   clearMakers();
   event.preventDefault();
-  var location = $('#address').val();
+  var location = $('#restaurant').val();
   console.log("location: " + location);
   $('#address').val("");
   $('#results').html("<h2 class='text-center'> Results for " + location + "</h2>");
