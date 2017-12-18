@@ -87,6 +87,8 @@ $('#submit').on('click', function(){
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
+
+    $('#maptext').text("Click on the marker for information about the restaurant");
   } else {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
