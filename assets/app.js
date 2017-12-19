@@ -22,7 +22,7 @@ infoWindow.open(map);
 
 
 $('#submit').on('click', function(){
-  clearMakers();
+  clearMarkers();
   event.preventDefault();
   var location = $('#restaurant').val();
   console.log("location: " + location);
@@ -40,49 +40,7 @@ $('#submit').on('click', function(){
       map.setCenter(pos);
       map.setZoom(12);
 
-      var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=" + location + "&latitude=" + pos.lat + "&longitude=" + pos.lng + "&limit=5",
-        "method": "GET",
-        "headers": {
-          "authorization": "Bearer p7FLN3mZ05l12noAsPo9XnkpnHonn_1O2asNEkYcBDuW0NcQNcilhY-zp0zhaSOTm-TkYVceqKZnzPzUMQorpxo6w8hOWNhc-TYT2tIaYlYbHMnLgcgh-0uDTxczWnYx",
-          "Cache-Control": "no-cache",
-          "Postman-Token": "486cc89e-9d50-c747-f79a-a8e008227e22"
-        }
-      }
-
-      $.ajax(settings).done(function (response) {
-        console.log(response);
-
-        var dataObj = response.businesses
-        var localList = dataObj;
-        console.log(dataObj);
-
-          for (var i = 0; i < dataObj.length; i++){
-            var name = dataObj[i].name;
-            var phone = dataObj[i].display_phone;
-            var rating = dataObj[i].rating;
-            var price = dataObj[i].price;
-            var addresses = [];
-
-            $('#results').append('<h5>' + name + '</h5>')
-
-            for (var j = 0; j < dataObj[i].location.display_address.length; j++){
-              $('#results').append(dataObj[i].location.display_address[j] + '<br>');
-              addresses.push(dataObj[i].location.display_address[j]);
-              console.log("address: "+addresses);
-            }
-
-            geoCoder(addresses,name,addresses)
-            addresses = "";
-            $('#results').append(phone + '<br>')
-            $('#results').append('Rating: ' + rating + '<br>')
-            $('#results').append('Price: ' + price + '<br>' + '<br>')
-            // var link = dataObj[i].url;
-            // $('#results').append('Website: '+ '<a href="' + link + '"Link </a> <br>');
-          }
-      })
+      restaurantFinder(location,pos);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
@@ -177,12 +135,56 @@ function currentMarker(location) {
 
 
 //Removing Markers
-function clearMakers(){
+function clearMarkers(){
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
   }
 };
 
+function restaurantFinder(location,pos){
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=" + location + "&latitude=" + pos.lat + "&longitude=" + pos.lng + "&limit=5",
+    "method": "GET",
+    "headers": {
+      "authorization": "Bearer p7FLN3mZ05l12noAsPo9XnkpnHonn_1O2asNEkYcBDuW0NcQNcilhY-zp0zhaSOTm-TkYVceqKZnzPzUMQorpxo6w8hOWNhc-TYT2tIaYlYbHMnLgcgh-0uDTxczWnYx",
+      "Cache-Control": "no-cache",
+      "Postman-Token": "486cc89e-9d50-c747-f79a-a8e008227e22"
+    }
+  }
 
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+
+    var dataObj = response.businesses
+    var localList = dataObj;
+    console.log(dataObj);
+
+      for (var i = 0; i < dataObj.length; i++){
+        var name = dataObj[i].name;
+        var phone = dataObj[i].display_phone;
+        var rating = dataObj[i].rating;
+        var price = dataObj[i].price;
+        var addresses = [];
+
+        $('#results').append('<h5>' + name + '</h5>')
+
+        for (var j = 0; j < dataObj[i].location.display_address.length; j++){
+          $('#results').append(dataObj[i].location.display_address[j] + '<br>');
+          addresses.push(dataObj[i].location.display_address[j]);
+          console.log("address: "+addresses);
+        }
+
+        geoCoder(addresses,name,addresses)
+        addresses = "";
+        $('#results').append(phone + '<br>')
+        $('#results').append('Rating: ' + rating + '<br>')
+        $('#results').append('Price: ' + price + '<br>' + '<br>')
+        // var link = dataObj[i].url;
+        // $('#results').append('Website: '+ '<a href="' + link + '"Link </a> <br>');
+      }
+  })
+}
 
 
