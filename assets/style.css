@@ -8984,3 +8984,8 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+#data-image {
+  width: 250px;
+  height: 225px;
+}

@@ -1,6 +1,7 @@
 //this function creates the map; it needs the css styling to render
   var map, infoWindow;
   var markers = [];
+  var imageArr = [];
   var pos;
   
 function initMap() {
@@ -59,19 +60,28 @@ $('#submit').on('click', function(){
         var localList = dataObj;
         console.log(dataObj);
 
+
+
           for (var i = 0; i < dataObj.length; i++){
             var name = dataObj[i].name;
             var phone = dataObj[i].display_phone;
             var rating = dataObj[i].rating;
             var price = dataObj[i].price;
+            var image = dataObj[i].image_url
             var addresses = [];
+            
+            imageArr.push(image);
+            console.log(imageArr)
+
 
             $('#results').append('<h5>' + name + '</h5>')
+            $('#results').append($('<img id="data-image">').attr('src', image));
+            $('#results').append('<br>');
 
             for (var j = 0; j < dataObj[i].location.display_address.length; j++){
               $('#results').append(dataObj[i].location.display_address[j] + '<br>');
               addresses.push(dataObj[i].location.display_address[j]);
-              console.log("address: "+addresses);
+              console.log("address: " + addresses);
             }
 
             geoCoder(addresses,name,addresses)
@@ -79,9 +89,11 @@ $('#submit').on('click', function(){
             $('#results').append(phone + '<br>')
             $('#results').append('Rating: ' + rating + '<br>')
             $('#results').append('Price: ' + price + '<br>' + '<br>')
+
             // var link = dataObj[i].url;
             // $('#results').append('Website: '+ '<a href="' + link + '"Link </a> <br>');
           }
+    
       })
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
