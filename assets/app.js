@@ -145,12 +145,12 @@ function restaurantFinder(location,pos){
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=" + location + "&latitude=" + pos.lat + "&longitude=" + pos.lng + "&limit=5",
+    "url": "https://cryptic-headland-94862.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=" + location + "&latitude=" + pos.lat + "&longitude=" + pos.lng + "&limit=5",
     "method": "GET",
     "headers": {
       "authorization": "Bearer p7FLN3mZ05l12noAsPo9XnkpnHonn_1O2asNEkYcBDuW0NcQNcilhY-zp0zhaSOTm-TkYVceqKZnzPzUMQorpxo6w8hOWNhc-TYT2tIaYlYbHMnLgcgh-0uDTxczWnYx",
       "Cache-Control": "no-cache",
-      "Postman-Token": "486cc89e-9d50-c747-f79a-a8e008227e22"
+      "Postman-Token": "8d7b0901-bf90-8b9a-bddc-874596ebc0e8"
     }
   }
 
